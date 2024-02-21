@@ -7,6 +7,7 @@ import { AuthContext } from "../contexts/JWTContext";
 
 const useAuth = () => {
   const context = useContext(AuthContext);
+  // console.log("cheguei no useAuth");
 
   if (!context)
     throw new Error("AuthContext must be placed within AuthProvider");

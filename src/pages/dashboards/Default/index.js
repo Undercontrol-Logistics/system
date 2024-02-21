@@ -12,6 +12,7 @@ import { spacing } from "@mui/system";
 import { green, red } from "@mui/material/colors";
 
 import Actions from "./Actions";
+import USA from "./USA";
 import BarChart from "./BarChart";
 import LineChart from "./LineChart";
 import DoughnutChart from "./DoughnutChart";
@@ -31,10 +32,10 @@ function Default() {
       <Grid justifyContent="space-between" container spacing={6}>
         <Grid item>
           <Typography variant="h3" gutterBottom>
-            Default Dashboard
+            Diesel Dashboard
           </Typography>
           <Typography variant="subtitle1">
-            {t("Welcome back")}, Lucy! {t("We've missed you")}.{" "}
+            {t("Welcome back")}, {t("username")}! {t("We've missed you")}.{" "}
             <span role="img" aria-label="Waving Hand Sign">
               👋
             </span>
@@ -97,11 +98,11 @@ function Default() {
         </Grid>
       </Grid>
       <Grid container spacing={6}>
-        <Grid item xs={12} lg={4}>
+        <Grid item xs={12} lg={6}>
           <BarChart />
         </Grid>
-        <Grid item xs={12} lg={8}>
-          <Table />
+        <Grid item xs={12} lg={6}>
+          <USA />
         </Grid>
       </Grid>
     </React.Fragment>

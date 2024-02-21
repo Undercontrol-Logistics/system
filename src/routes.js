@@ -9,7 +9,7 @@ import async from "./components/Async";
 import AuthLayout from "./layouts/Auth";
 import DashboardLayout from "./layouts/Dashboard";
 import DocLayout from "./layouts/Doc";
-import PresentationLayout from "./layouts/Presentation";
+// import PresentationLayout from "./layouts/Presentation";
 
 // Guards
 import AuthGuard from "./components/guards/AuthGuard";
@@ -79,7 +79,7 @@ import Support from "./pages/docs/Support";
 import Changelog from "./pages/docs/Changelog";
 
 // Landing
-import Landing from "./pages/presentation/Landing";
+// import Landing from "./pages/presentation/Landing";
 
 // Protected routes
 import ProtectedPage from "./pages/protected/ProtectedPage";
@@ -114,11 +114,11 @@ const VectorMaps = async(() => import("./pages/maps/VectorMaps"));
 const routes = [
   {
     path: "/",
-    element: <PresentationLayout />,
+    element: <AuthLayout />,
     children: [
       {
         path: "",
-        element: <Landing />,
+        element: <SignIn />,
       },
     ],
   },
@@ -135,7 +135,7 @@ const routes = [
         element: <Analytics />,
       },
       {
-        path: "saas",
+        path: "diesel",
         element: <SaaS />,
       },
     ],

@@ -16,7 +16,7 @@ const customBlue = {
 };
 
 const defaultVariant = {
-  name: THEMES.DEFAULT,
+  name: THEMES.DEFAULT1,
   palette: {
     mode: "light",
     primary: {
@@ -71,7 +71,7 @@ const defaultVariant = {
 };
 
 const darkVariant = merge(defaultVariant, {
-  name: THEMES.DARK,
+  name: THEMES.DEFAULT,
   palette: {
     mode: "dark",
     primary: {

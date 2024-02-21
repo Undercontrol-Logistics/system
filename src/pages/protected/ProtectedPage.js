@@ -11,9 +11,9 @@ const Alert = styled(MuiAlert)(spacing);
 function ProtectedPage() {
   return (
     <React.Fragment>
-      <Alert mb={4} severity="info">
+      {/* <Alert mb={4} severity="info">
         This page is only visible by authenticated users.
-      </Alert>
+      </Alert> */}
 
       <Default />
     </React.Fragment>

@@ -5,6 +5,8 @@ import { MoreVertical } from "react-feather";
 
 import { VectorMap } from "@react-jvectormap/core";
 import usAea from "@react-jvectormap/unitedstates/dist/usAea.json";
+import useAuth from "../../../hooks/useAuth";
+import getDiesel from "../../../hooks/getDiesel";
 
 import {
   Card as MuiCard,
@@ -13,6 +15,8 @@ import {
   IconButton,
 } from "@mui/material";
 import { spacing } from "@mui/system";
+// import { co } from "@fullcalendar/core/internal-common";
+// import { log } from "util";
 
 const MapContainer = styled.div`
   height: 344px;
@@ -60,8 +64,8 @@ function USAMap(props) {
     zoomOnScroll: false,
     markers: [
       {
-        latLng: [37.77, -122.41],
-        name: "San Francisco: 375",
+        latLng: [37.77, -74.0],
+        name: "San Francisco: tet1etet",
       },
       {
         latLng: [40.71, -74.0],
@@ -73,14 +77,22 @@ function USAMap(props) {
       },
       {
         latLng: [36.16, -115.13],
-        name: "Las Vegas: 275",
+        name: "Las tete: 275",
       },
       {
-        latLng: [32.77, -96.79],
-        name: "Dallas: 225",
+        latLng: [41.39, -73.45],
+        name: "Dallas: 22151",
       },
     ],
   };
+  const context = useAuth();
+  console.log(context.id);
+  try {
+    console.log("try");
+    console.log(getDiesel(context.id));
+  } catch (error) {
+    console.log("catch");
+  }
 
   return (
     <Card mb={6}>

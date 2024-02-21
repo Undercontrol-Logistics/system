@@ -69,9 +69,9 @@ const Sidebar = ({ items, showFooter = true, ...rest }) => {
     <Drawer variant="permanent" {...rest}>
       <Brand component={NavLink} to="/">
         <BrandIcon />{" "}
-        <Box ml={1}>
+        {/* <Box ml={1}>
           Mira <BrandChip label="PRO" />
-        </Box>
+        </Box> */}
       </Brand>
       <SidebarNav items={items} />
       {!!showFooter && <Footer />}

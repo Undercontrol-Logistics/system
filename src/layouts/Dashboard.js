@@ -10,9 +10,11 @@ import { spacing } from "@mui/system";
 import GlobalStyle from "../components/GlobalStyle";
 import Navbar from "../components/navbar/Navbar";
 import dashboardItems from "../components/sidebar/dashboardItems";
+import dashboardItemsAdmin from "../components/sidebar/dashboardItemsAdmin";
 import Sidebar from "../components/sidebar/Sidebar";
 import Footer from "../components/Footer";
 import Settings from "../components/Settings";
+import useAuth from "../hooks/useAuth";
 
 const drawerWidth = 258;
 
@@ -65,7 +67,11 @@ const Dashboard = ({ children }) => {
 
   const theme = useTheme();
   const isLgUp = useMediaQuery(theme.breakpoints.up("lg"));
-
+  const context = useAuth();
+  // console.log(context);
+  const dashboardItemsAfterFilter =
+    context.role === "admin" ? dashboardItemsAdmin : dashboardItems;
+  // console.log(dashboardItemsAfterFilter);
   return (
     <Root>
       <CssBaseline />
@@ -77,13 +83,13 @@ const Dashboard = ({ children }) => {
             variant="temporary"
             open={mobileOpen}
             onClose={handleDrawerToggle}
-            items={dashboardItems}
+            items={dashboardItemsAfterFilter}
           />
         </Box>
         <Box sx={{ display: { xs: "none", md: "block" } }}>
           <Sidebar
             PaperProps={{ style: { width: drawerWidth } }}
-            items={dashboardItems}
+            items={dashboardItemsAfterFilter}
           />
         </Box>
       </Drawer>

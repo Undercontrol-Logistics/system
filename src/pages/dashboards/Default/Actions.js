@@ -36,10 +36,10 @@ function Actions() {
       <SmallButton size="small" mr={2}>
         <LoopIcon />
       </SmallButton>
-      <SmallButton size="small" mr={2}>
+      {/* <SmallButton size="small" mr={2}>
         <FilterListIcon />
-      </SmallButton>
-      <Button
+      </SmallButton> */}
+      {/* <Button
         variant="contained"
         color="secondary"
         aria-owns={anchorEl ? "simple-menu" : undefined}
@@ -47,7 +47,7 @@ function Actions() {
         onClick={handleClick}
       >
         Today: April 29
-      </Button>
+      </Button> */}
       <Menu
         id="simple-menu"
         anchorEl={anchorEl}

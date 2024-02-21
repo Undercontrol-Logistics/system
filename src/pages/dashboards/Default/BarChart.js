@@ -41,7 +41,7 @@ const BarChart = ({ theme }) => {
     ],
     datasets: [
       {
-        label: "Mobile",
+        label: "Diesel",
         backgroundColor: firstDatasetColor,
         borderColor: firstDatasetColor,
         hoverBackgroundColor: firstDatasetColor,
@@ -51,7 +51,7 @@ const BarChart = ({ theme }) => {
         categoryPercentage: 0.5,
       },
       {
-        label: "Desktop",
+        label: "Estimated Mileage",
         backgroundColor: secondDatasetColor,
         borderColor: secondDatasetColor,
         hoverBackgroundColor: secondDatasetColor,
@@ -103,7 +103,7 @@ const BarChart = ({ theme }) => {
             <MoreVertical />
           </IconButton>
         }
-        title="Mobile / Desktop"
+        title="Monthly Fuel Consumption"
       />
 
       <CardContent>

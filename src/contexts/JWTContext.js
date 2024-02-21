@@ -15,6 +15,8 @@ const initialState = {
   isAuthenticated: false,
   isInitialized: false,
   user: null,
+  id: null,
+  role: null,
 };
 
 const JWTReducer = (state, action) => {
@@ -30,6 +32,8 @@ const JWTReducer = (state, action) => {
         ...state,
         isAuthenticated: true,
         user: action.payload.user,
+        id: action.payload.id,
+        role: action.payload.role,
       };
     case SIGN_OUT:
       return {
@@ -54,6 +58,7 @@ const AuthContext = createContext(null);
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(JWTReducer, initialState);
+  // console.log("cheguei no auth provider");
 
   useEffect(() => {
     const initialize = async () => {
@@ -63,7 +68,9 @@ function AuthProvider({ children }) {
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
 
-          const response = await axios.get("/api/auth/my-account");
+          const response = await axios.get(
+            "http://diesel.api.undercontrol.tech/login/login.php"
+          );
           const { user } = response.data;
 
           console.log(user);
@@ -100,17 +107,23 @@ function AuthProvider({ children }) {
   }, []);
 
   const signIn = async (email, password) => {
-    const response = await axios.post("/api/auth/sign-in", {
-      email,
-      password,
-    });
-    const { accessToken, user } = response.data;
+    // console.log("cheguei no sign in");
 
+    const response = await axios.post(
+      "https://diesel.api.undercontrol.tech/login/login.php",
+      {
+        email,
+        password,
+      }
+    );
+    const { accessToken, id, user, role } = response.data;
     setSession(accessToken);
     dispatch({
       type: SIGN_IN,
       payload: {
         user,
+        id,
+        role,
       },
     });
   };
@@ -121,12 +134,15 @@ function AuthProvider({ children }) {
   };
 
   const signUp = async (email, password, firstName, lastName) => {
-    const response = await axios.post("/api/auth/sign-up", {
-      email,
-      password,
-      firstName,
-      lastName,
-    });
+    const response = await axios.post(
+      "https://diesel.api.undercontrol.tech/login/login.php",
+      {
+        email,
+        password,
+        firstName,
+        lastName,
+      }
+    );
     const { accessToken, user } = response.data;
 
     window.localStorage.setItem("accessToken", accessToken);

@@ -37,7 +37,8 @@ const FooterBadge = styled(Badge)`
 `;
 
 const SidebarFooter = ({ ...rest }) => {
-  const { user } = useAuth();
+  const { user, role } = useAuth();
+  console.log(user);
 
   return (
     <Footer {...rest}>
@@ -51,23 +52,16 @@ const SidebarFooter = ({ ...rest }) => {
             }}
             variant="dot"
           >
-            {!!user && <Avatar alt={user.displayName} src={user.avatar} />}
+            {!!user && <Avatar alt={user} src={user.avatar} />}
             {/* Demo data */}
-            {!user && (
-              <Avatar
-                alt="Lucy Lavender"
-                src="/static/img/avatars/avatar-1.jpg"
-              />
-            )}
+            {!user && <Avatar src="/static/img/avatars/avatar-1.jpg" />}
           </FooterBadge>
         </Grid>
         <Grid item>
-          {!!user && (
-            <FooterText variant="body2">{user.displayName}</FooterText>
-          )}
+          {!!user && <FooterText variant="body2">{user}</FooterText>}
           {/* Demo data */}
           {!user && <FooterText variant="body2">Lucy Lavender</FooterText>}
-          <FooterSubText variant="caption">UX Designer</FooterSubText>
+          <FooterSubText variant="caption">{role}</FooterSubText>
         </Grid>
       </Grid>
     </Footer>

@@ -31,7 +31,7 @@ function SaaS() {
       <Grid justifyContent="space-between" container spacing={6}>
         <Grid item>
           <Typography variant="h3" gutterBottom>
-            SaaS Dashboard
+            Diesel Dashboard
           </Typography>
           <Typography variant="subtitle1">
             {t("Welcome back")}, Lucy! {t("We've missed you")}.{" "}
