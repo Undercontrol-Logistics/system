@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { withTheme } from "@emotion/react";
 import { MoreVertical } from "react-feather";
+import dieselFetch from "../../../utils/dieselFetch";
 
 import { VectorMap } from "@react-jvectormap/core";
 import usAea from "@react-jvectormap/unitedstates/dist/usAea.json";
 import useAuth from "../../../hooks/useAuth";
-import getDiesel from "../../../hooks/getDiesel";
 
 import {
   Card as MuiCard,
@@ -15,8 +15,6 @@ import {
   IconButton,
 } from "@mui/material";
 import { spacing } from "@mui/system";
-// import { co } from "@fullcalendar/core/internal-common";
-// import { log } from "util";
 
 const MapContainer = styled.div`
   height: 344px;
@@ -31,8 +29,30 @@ const CardContent = styled(MuiCardContent)`
   }
 `;
 
+function transformData(input) {
+  return input.map((item) => ({
+    latLng: [
+      parseFloat(item.latMap).toFixed(1),
+      parseFloat(item.longMap).toFixed(2),
+    ],
+    name: `${item.city}`,
+  }));
+}
+
 function USAMap(props) {
-  const options = {
+  const context = useAuth();
+  const [markers, setMarkers] = useState([]);
+
+  useEffect(() => {
+    dieselFetch("GET", null, context.id).then((data) => {
+      const infoMap = transformData(data);
+      setMarkers(infoMap);
+    });
+  }, [context.id]);
+
+  const mapKey = JSON.stringify(markers); // Chave única com base nos marcadores
+
+  let options = {
     regionStyle: {
       initial: {
         fill:
@@ -61,39 +81,9 @@ function USAMap(props) {
         "stroke-width": 1.5,
       },
     },
-    zoomOnScroll: false,
-    markers: [
-      {
-        latLng: [37.77, -74.0],
-        name: "San Francisco: tet1etet",
-      },
-      {
-        latLng: [40.71, -74.0],
-        name: "New York: 350",
-      },
-      {
-        latLng: [39.09, -94.57],
-        name: "Kansas City: 250",
-      },
-      {
-        latLng: [36.16, -115.13],
-        name: "Las tete: 275",
-      },
-      {
-        latLng: [41.39, -73.45],
-        name: "Dallas: 22151",
-      },
-    ],
+    markers: markers,
   };
-  const context = useAuth();
-  console.log(context.id);
-  try {
-    console.log("try");
-    console.log(getDiesel(context.id));
-  } catch (error) {
-    console.log("catch");
-  }
-
+  console.log(options.markers);
   return (
     <Card mb={6}>
       <CardHeader
@@ -106,11 +96,10 @@ function USAMap(props) {
       />
       <CardContent>
         <MapContainer>
-          <VectorMap map={usAea} {...options} />
+          <VectorMap map={usAea} {...options} key={mapKey} />
         </MapContainer>
       </CardContent>
     </Card>
   );
 }
-
 export default withTheme(USAMap);

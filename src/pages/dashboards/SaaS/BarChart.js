@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { withTheme } from "@emotion/react";
 import { Bar } from "react-chartjs-2";
 import { MoreVertical } from "react-feather";
 import { rgba } from "polished";
+import dieselFetch from "../../../utils/dieselFetch";
+import useAuth from "../../../hooks/useAuth";
 
 import {
   Card as MuiCard,
@@ -20,7 +22,36 @@ const ChartWrapper = styled.div`
   width: 100%;
 `;
 
+const transformData = (data) => {
+  const monthData = Array.from({ length: 12 }, () => ({
+    prices: 0,
+    gallons: 0,
+  }));
+
+  data.forEach((obj) => {
+    const date = new Date(obj.date);
+    const month = date.getMonth(); // Obtém o mês (0 a 11)
+
+    monthData[month].prices += parseFloat(obj.price);
+    monthData[month].gallons += parseInt(obj.gallons);
+  });
+
+  return monthData;
+};
+
 const BarChart = ({ theme }) => {
+  const context = useAuth();
+  const [monthData, setMonthData] = useState(
+    Array.from({ length: 12 }, () => ({ prices: 0, gallons: 0 }))
+  );
+
+  useEffect(() => {
+    dieselFetch("GET", null, context.id).then((data) => {
+      const transformedData = transformData(data);
+      setMonthData(transformedData);
+    });
+  }, [context.id]);
+
   const firstDatasetColor = theme.palette.secondary.main;
   const secondDatasetColor = rgba(theme.palette.secondary.main, 0.33);
 
@@ -41,22 +72,22 @@ const BarChart = ({ theme }) => {
     ],
     datasets: [
       {
-        label: "Mobile",
+        label: "Price",
         backgroundColor: firstDatasetColor,
         borderColor: firstDatasetColor,
         hoverBackgroundColor: firstDatasetColor,
         hoverBorderColor: firstDatasetColor,
-        data: [54, 67, 41, 55, 62, 45, 55, 73, 60, 76, 48, 79],
+        data: monthData.map((item) => item.prices),
         barPercentage: 0.4,
         categoryPercentage: 0.5,
       },
       {
-        label: "Desktop",
+        label: "Gallons",
         backgroundColor: secondDatasetColor,
         borderColor: secondDatasetColor,
         hoverBackgroundColor: secondDatasetColor,
         hoverBorderColor: secondDatasetColor,
-        data: [69, 66, 24, 48, 52, 51, 44, 53, 62, 79, 51, 68],
+        data: monthData.map((item) => item.gallons),
         barPercentage: 0.4,
         categoryPercentage: 0.5,
         borderRadius: 6,

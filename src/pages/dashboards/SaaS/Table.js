@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { MoreVertical } from "react-feather";
+import dieselFetch from "../../../utils/dieselFetch";
+import useAuth from "../../../hooks/useAuth";
 
 import {
   Card as MuiCard,
@@ -34,104 +36,67 @@ const TableWrapper = styled.div`
   max-width: calc(100vw - ${(props) => props.theme.spacing(12)});
 `;
 
-// Data
-let id = 0;
-function createData(name, license, tech, tickets, sales) {
-  id += 1;
-  return { id, name, license, tech, tickets, sales };
-}
+const DashboardTable = () => {
+  const context = useAuth();
+  const [rows, setRows] = useState([]);
 
-const rows = [
-  createData(
-    "Aurora",
-    "Single License",
-    <Chip label="React" color="success" />,
-    12,
-    1205
-  ),
-  createData(
-    "Canary",
-    "Single License",
-    <Chip label="React" color="success" />,
-    1,
-    410
-  ),
-  createData(
-    "Eagle",
-    "Extended License",
-    <Chip label="Angular" color="warning" />,
-    2,
-    108
-  ),
-  createData(
-    "Fireball",
-    "Single License",
-    <Chip label="React" color="success" />,
-    3,
-    360
-  ),
-  createData(
-    "Omega",
-    "Single License",
-    <Chip label="Angular" color="warning" />,
-    6,
-    712
-  ),
-  createData(
-    "Yoda",
-    "Extended License",
-    <Chip label="Angular" color="success" />,
-    15,
-    1502
-  ),
-  createData(
-    "Zulu",
-    "Extended License",
-    <Chip label="Angular" color="success" />,
-    2,
-    480
-  ),
-];
+  useEffect(() => {
+    dieselFetch("GET", null, context.id).then((data) => {
+      const transformedData = transformData(data);
+      setRows(transformedData.slice(0, 7));
+    });
+  }, [context.id]);
 
-const DashboardTable = () => (
-  <Card mb={6}>
-    <CardHeader
-      action={
-        <IconButton aria-label="settings" size="large">
-          <MoreVertical />
-        </IconButton>
-      }
-      title="Latest products"
-    />
-    <Paper>
-      <TableWrapper>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Product Name</TableCell>
-              <TableCell>License Type</TableCell>
-              <TableCell>Technology</TableCell>
-              <TableCell>Open Tickets</TableCell>
-              <TableCell>Sales</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell>{row.license}</TableCell>
-                <TableCell>{row.tech}</TableCell>
-                <TableCell>{row.tickets}</TableCell>
-                <TableCell>{row.sales}</TableCell>
+  const transformData = (data) => {
+    return data.map((obj) => ({
+      name: `${obj.city}/${obj.state}`,
+      gallons: parseInt(obj.gallons),
+      price: parseFloat(obj.price),
+      date: new Date(obj.date).toLocaleDateString("en-US"),
+      obs: obj.obs,
+    }));
+  };
+
+  return (
+    <Card mb={6}>
+      <CardHeader
+        action={
+          <IconButton aria-label="settings" size="large">
+            <MoreVertical />
+          </IconButton>
+        }
+        title="Latest products"
+      />
+      <Paper>
+        <TableWrapper>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>City/State</TableCell>
+                <TableCell>Gallons</TableCell>
+                <TableCell>Price</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Obs</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableWrapper>
-    </Paper>
-  </Card>
-);
+            </TableHead>
+            <TableBody>
+              {rows.map((row, index) => (
+                <TableRow key={index}>
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell>{row.gallons}</TableCell>
+                  <TableCell>${row.price}</TableCell>
+                  <TableCell>{row.date}</TableCell>
+                  <TableCell>{row.obs}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableWrapper>
+      </Paper>
+    </Card>
+  );
+};
 
 export default DashboardTable;

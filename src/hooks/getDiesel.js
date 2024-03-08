@@ -13,7 +13,7 @@ async function getDiesel(userId) {
 
     // Fazendo a requisição GET com os headers configurados
     const response = await axios.get(url, body, { headers });
-
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Ocorreu um erro:", error);

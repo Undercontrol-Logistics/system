@@ -135,7 +135,7 @@ function AuthProvider({ children }) {
 
   const signUp = async (email, password, firstName, lastName) => {
     const response = await axios.post(
-      "https://diesel.api.undercontrol.tech/login/login.php",
+      "https://diesel.api.undercontrol.tech/login/register.php",
       {
         email,
         password,
