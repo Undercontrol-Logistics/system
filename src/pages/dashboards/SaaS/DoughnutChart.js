@@ -149,7 +149,7 @@ const DoughnutChart = ({ theme }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Gallons per state</TableCell>
+              <TableCell>State</TableCell>
               <TableCell align="right">Gallons</TableCell>
             </TableRow>
           </TableHead>
