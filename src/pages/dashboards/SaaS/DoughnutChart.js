@@ -135,7 +135,7 @@ const DoughnutChart = ({ theme }) => {
             <MoreVertical />
           </IconButton>
         }
-        title="Weekly sales"
+        title="Gallons by State This Month"
       />
 
       <CardContent>
