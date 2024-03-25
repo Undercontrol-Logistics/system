@@ -126,7 +126,8 @@ const BarChart = ({ theme }) => {
             <MoreVertical />
           </IconButton>
         }
-        title="Sales / Revenue"
+        title="Gallons & Prices"
+        subheader="Total gallons and price Usage by Month"
       />
 
       <CardContent>

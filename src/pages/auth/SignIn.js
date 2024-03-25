@@ -37,18 +37,19 @@ function SignIn() {
       <Wrapper>
         <Helmet title="Sign In" />
         <BigAvatar alt="Logo" src={eldLogo} />
-
         <Typography component="h1" variant="h4" align="center" gutterBottom>
           Welcome back!
         </Typography>
         <Typography component="h2" variant="body1" align="center">
-          Sign in to your account to continue. Don't have an account?
+          Sign in to your account to continue.
+        </Typography>
+        <SignInComponent />
+        <Typography component="h2" variant="body1" align="center">
+          Don't have an account?
           <Button component={Link} to="/auth/sign-up" fullWidth color="primary">
             Sign Up
           </Button>
         </Typography>
-
-        <SignInComponent />
       </Wrapper>
     </React.Fragment>
   );

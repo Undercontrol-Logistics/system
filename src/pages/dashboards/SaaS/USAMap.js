@@ -92,7 +92,7 @@ function USAMap(props) {
             <MoreVertical />
           </IconButton>
         }
-        title="Real-Time"
+        title="Fuel locations"
       />
       <CardContent>
         <MapContainer>

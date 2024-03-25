@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { withTheme } from "@emotion/react";
 import { Doughnut } from "react-chartjs-2";
 import { MoreVertical } from "react-feather";
+import dieselFetch from "../../../utils/dieselFetch";
+import useAuth from "../../../hooks/useAuth";
 
 import { orange, green, red } from "@mui/material/colors";
 import {
@@ -22,7 +24,7 @@ import { spacing } from "@mui/system";
 const Card = styled(MuiCard)(spacing);
 
 const ChartWrapper = styled.div`
-  height: 182px;
+  height: 168px;
   position: relative;
 `;
 
@@ -56,16 +58,58 @@ const RedText = styled.span`
 `;
 
 const DoughnutChart = ({ theme }) => {
+  const context = useAuth();
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    dieselFetch("GET", null, context.id).then((data) => {
+      const transformedData = transformData(data);
+      setRows(transformedData);
+    });
+  }, [context.id]);
+
+  const transformData = (data) => {
+    return data.map((obj) => ({
+      state: obj.state,
+      gallons: parseInt(obj.gallons),
+      date: new Date(obj.date),
+    }));
+  };
+
+  const currentMonthData = rows.filter((row) => {
+    const currentDate = new Date();
+    return (
+      row.date.getMonth() === currentDate.getMonth() &&
+      row.date.getFullYear() === currentDate.getFullYear()
+    );
+  });
+
+  const stateGallons = currentMonthData.reduce((accumulator, currentValue) => {
+    accumulator[currentValue.state] =
+      (accumulator[currentValue.state] || 0) + currentValue.gallons;
+    return accumulator;
+  }, {});
+
+  const sortedStates = Object.entries(stateGallons)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
+
+  const totalGallons = sortedStates.reduce(
+    (acc, [_, gallons]) => acc + gallons,
+    0
+  );
+
   const data = {
-    labels: ["Social", "Search Engines", "Direct", "Other"],
+    labels: sortedStates.map((entry) => entry[0]),
     datasets: [
       {
-        data: [260, 125, 54, 146],
+        data: sortedStates.map((entry) => entry[1]),
         backgroundColor: [
           theme.palette.secondary.main,
           red[500],
           orange[500],
           theme.palette.grey[200],
+          theme.palette.primary.main,
         ],
         borderWidth: 5,
         borderColor: theme.palette.background.paper,
@@ -97,56 +141,27 @@ const DoughnutChart = ({ theme }) => {
       <CardContent>
         <ChartWrapper>
           <DoughnutInner>
-            <Typography variant="h4">+27%</Typography>
-            <Typography variant="caption">more sales</Typography>
+            <Typography variant="h4">{totalGallons} Gal's</Typography>
+            <Typography variant="caption">total</Typography>
           </DoughnutInner>
           <Doughnut data={data} options={options} />
         </ChartWrapper>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Source</TableCell>
-              <TableCell align="right">Revenue</TableCell>
-              <TableCell align="right">Value</TableCell>
+              <TableCell>Gallons per state</TableCell>
+              <TableCell align="right">Gallons</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow>
-              <TableCell component="th" scope="row">
-                Social
-              </TableCell>
-              <TableCell align="right">260</TableCell>
-              <TableCell align="right">
-                <GreenText>+35%</GreenText>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell component="th" scope="row">
-                Search Engines
-              </TableCell>
-              <TableCell align="right">125</TableCell>
-              <TableCell align="right">
-                <RedText>-12%</RedText>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell component="th" scope="row">
-                Direct
-              </TableCell>
-              <TableCell align="right">54</TableCell>
-              <TableCell align="right">
-                <GreenText>+46%</GreenText>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell component="th" scope="row">
-                Other
-              </TableCell>
-              <TableCell align="right">146</TableCell>
-              <TableCell align="right">
-                <GreenText>+24%</GreenText>
-              </TableCell>
-            </TableRow>
+            {sortedStates.map((entry, index) => (
+              <TableRow key={index}>
+                <TableCell component="th" scope="row">
+                  {entry[0]}
+                </TableCell>
+                <TableCell align="right">{entry[1]}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </CardContent>

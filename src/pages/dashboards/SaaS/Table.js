@@ -65,7 +65,7 @@ const DashboardTable = () => {
             <MoreVertical />
           </IconButton>
         }
-        title="Latest products"
+        title="Latest Fuels"
       />
       <Paper>
         <TableWrapper>

@@ -134,24 +134,32 @@ function AuthProvider({ children }) {
   };
 
   const signUp = async (email, password, firstName, lastName) => {
-    const response = await axios.post(
-      "https://diesel.api.undercontrol.tech/login/register.php",
-      {
-        email,
-        password,
-        firstName,
-        lastName,
-      }
-    );
-    const { accessToken, user } = response.data;
+    try {
+      const response = await axios.post(
+        "https://diesel.api.undercontrol.tech/login/register.php",
+        {
+          username: email, // Ajuste para o campo esperado pelo backend (username)
+          password,
+          firstName,
+          lastName,
+        }
+      );
 
-    window.localStorage.setItem("accessToken", accessToken);
-    dispatch({
-      type: SIGN_UP,
-      payload: {
-        user,
-      },
-    });
+      const { token } = response.data;
+
+      window.localStorage.setItem("accessToken", token); // Salvando o token no localStorage
+      dispatch({
+        // Supondo que dispatch seja passado como argumento ou esteja disponível no escopo
+        type: SIGN_UP,
+        payload: {
+          token,
+        },
+      });
+    } catch (error) {
+      // Lidar com erros de requisição
+      console.error("Error during sign up:", error);
+      // Aqui você pode decidir como lidar com o erro, como exibir uma mensagem de erro para o usuário
+    }
   };
 
   const resetPassword = (email) => console.log(email);

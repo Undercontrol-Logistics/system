@@ -30,7 +30,9 @@ function Actions() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const date = new Date();
+  const options = { month: "long", day: "numeric" };
+  const formattedDate = date.toLocaleDateString("en-US", options);
   return (
     <React.Fragment>
       <SmallButton size="small" mr={2}>
@@ -46,7 +48,7 @@ function Actions() {
         aria-haspopup="true"
         onClick={handleClick}
       >
-        Today: April 29
+        Today: {formattedDate}
       </Button>
       <Menu
         id="simple-menu"
